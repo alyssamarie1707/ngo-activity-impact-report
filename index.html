@@ -16,6 +16,662 @@
 <link rel="image_src" href="https://alyssamarie1707.github.io/ngo-activity-impact-report/og-image.png">
 <style>
   :root{
+    --bg:#f5f5f4;
+    --card:#ffffff;
+    --leaf:#e2e2e0;
+    --accent:#3f3f3f;
+    --teal:#1c1c1c;
+    --green-soft:#ececea;
+    --ink:#1f1f1e;
+    --muted:#75736e;
+    --line:#e3e2df;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,"Segoe UI",system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.55;
+  }
+  header{
+    background:#1c1c1c;
+    color:#fff;
+    padding:38px 20px 34px;
+    text-align:center;
+  }
+  header h1{font-size:1.75rem;font-weight:650;letter-spacing:.6px}
+  header p{margin-top:6px;opacity:.92;max-width:620px;margin-inline:auto}
+  main{max-width:880px;margin:0 auto;padding:28px 18px 60px}
+  section{margin-bottom:34px}
+  .section-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .section-num{
+    background:var(--teal);color:#fff;font-weight:700;
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .section-head h2{font-size:1.35rem;color:var(--teal)}
+  .section-sub{color:var(--muted);font-size:.92rem;margin-bottom:14px;margin-left:46px}
+  .card{
+    background:var(--card);border-radius:var(--radius);
+    box-shadow:0 1px 8px rgba(30,30,30,.07);
+    padding:20px;border:1px solid var(--line);
+  }
+
+  /* form */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .form-grid .full{grid-column:1/-1}
+  label{font-size:.85rem;font-weight:600;color:var(--teal);display:block;margin-bottom:4px}
+  input[type=text],input[type=date],input[type=number],textarea,select{
+    width:100%;padding:10px 12px;border:1.5px solid var(--line);
+    border-radius:8px;font-size:.95rem;font-family:inherit;background:#fcfcfb;color:var(--ink);
+  }
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  textarea{resize:vertical;min-height:70px}
+  .modules-box{border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;background:#fcfcfb}
+  .modules-box .chk{display:flex;align-items:center;gap:8px;font-size:.92rem;padding:3px 0;font-weight:400;color:var(--ink)}
+  .attach-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px}
+  .file-btn{
+    display:inline-block;padding:9px 16px;border-radius:10px;cursor:pointer;
+    background:var(--green-soft);color:var(--teal);font-weight:600;font-size:.9rem;border:1.5px dashed #9a9893;border-radius:8px;
+  }
+  .file-btn input{display:none}
+  .attach-note{font-size:.82rem;color:var(--muted)}
+  .btn{
+    display:inline-block;border:none;cursor:pointer;font-family:inherit;font-weight:600;
+    padding:12px 26px;border-radius:8px;font-size:.95rem;transition:filter .15s;letter-spacing:.3px;
+  }
+  .btn-primary{background:#3f3f3f;color:#fff}
+  .btn-teal{background:#1c1c1c;color:#fff}
+  .btn:hover{filter:brightness(1.07)}
+  .form-actions{text-align:right;margin-top:14px}
+
+  /* entries */
+  .entry{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;margin-bottom:14px;box-shadow:0 1px 6px rgba(30,30,30,.07);
+    position:relative;
+  }
+  .entry-tag{
+    position:absolute;top:-10px;left:18px;background:var(--leaf);color:#3f3f3f;
+    font-size:.72rem;font-weight:700;padding:3px 12px;border-radius:999px;letter-spacing:.4px;
+  }
+  .entry h3{color:var(--teal);font-size:1.1rem;margin-bottom:6px;margin-top:6px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+  .chip{background:var(--green-soft);color:var(--teal);font-size:.74rem;padding:4px 12px;border-radius:999px;font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+  .chip.warm{background:var(--leaf);color:#3f3f3f}
+  .entry p.notes{font-size:.93rem;margin-top:8px;color:#41403c}
+  .module-list{font-size:.88rem;margin-top:8px;color:#41403c}
+  .module-list strong{color:var(--teal)}
+  .pics{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .pics img{
+    width:120px;height:90px;object-fit:cover;border-radius:10px;
+    border:2px solid var(--leaf);
+  }
+  .empty-msg{color:var(--muted);font-style:italic;font-size:.9rem}
+
+  /* impact */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:16px}
+  .stat{
+    background:linear-gradient(160deg,#fff,var(--green-soft));
+    border-radius:var(--radius);padding:18px;text-align:center;border:1px solid var(--line);
+  }
+  .stat .num{font-size:2rem;font-weight:750;color:var(--teal)}
+  .stat .lbl{font-size:.78rem;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+  .bar-block{margin-bottom:14px}
+  .bar-title{display:flex;justify-content:space-between;font-size:.88rem;font-weight:600;margin-bottom:4px}
+  .bar-track{background:var(--line);border-radius:999px;height:14px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#4a4a4a,#8a8a88);transition:width .6s}
+  .insights{list-style:none;margin-top:6px}
+  .insights li{padding:8px 0 8px 28px;position:relative;font-size:.93rem;border-top:1px dashed var(--line)}
+  .insights li:first-child{border-top:none}
+  .insights li::before{content:"—";position:absolute;left:6px;color:var(--accent)}
+
+  /* report */
+  #reportPlaceholder{color:var(--muted);font-style:italic}
+  .report{
+    border:2px solid var(--teal);border-radius:var(--radius);padding:26px;background:#fff;
+  }
+  .report .r-head{text-align:center;border-bottom:2px solid var(--leaf);padding-bottom:14px;margin-bottom:16px}
+  .report .r-head h3{color:var(--teal);font-size:1.4rem}
+  .report .r-head .r-sub{color:var(--muted);font-size:.85rem;margin-top:4px}
+  .report h4{color:var(--teal);margin:16px 0 6px;font-size:1.02rem}
+  .report table{width:100%;border-collapse:collapse;font-size:.92rem;margin-top:6px}
+  .report td{padding:6px 8px;border-bottom:1px dashed var(--line)}
+  .report td:first-child{font-weight:600;color:var(--muted);width:38%}
+  .report ul{margin-left:20px;font-size:.93rem}
+  .report .r-pics{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .report .r-pics img{width:150px;height:110px;object-fit:cover;border-radius:10px;border:2px solid var(--green-soft)}
+  .report .r-foot{margin-top:20px;text-align:center;font-size:.8rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:12px}
+  .r-note{font-size:.8rem;color:var(--muted);margin-top:10px;font-style:italic}
+
+  .entry-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+  .mini-btn{
+    border:1.5px solid var(--line);background:#fcfcfb;color:var(--teal);
+    font-family:inherit;font-size:.82rem;font-weight:600;
+    padding:6px 14px;border-radius:999px;cursor:pointer;transition:filter .15s;
+  }
+  .mini-btn:hover{filter:brightness(1.05)}
+  .mini-btn.danger{color:#6b6b6b;border-color:#d8d7d4}
+
+  footer{text-align:center;color:var(--muted);font-size:.82rem;padding:20px}
+  @media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+
+  /* print: only the generated report */
+  @media print{
+    body *{visibility:hidden}
+    #reportArea,#reportArea *{visibility:visible}
+    #reportArea{position:absolute;left:0;top:0;width:100%}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>NGO Activity Impact Report</h1>
+  <p>Record one community activity, add pictures, and see the difference it made — all on one simple page.</p>
+</header>
+
+<main>
+
+  <!-- ============ 1. ACTIVITY LOG ============ -->
+  <section id="log-section">
+    <div class="section-head"><div class="section-num">1</div><h2>Activity Log</h2></div>
+    <p class="section-sub">Record one activity in one place: add an activity update and attach pictures.</p>
+
+    <div class="card" style="margin-bottom:20px">
+      <form id="activityForm">
+        <div class="form-grid">
+          <div class="full">
+            <label for="fName">Activity name</label>
+            <input type="text" id="fName" placeholder="e.g. Weekend Tuition Class at PPR Kerinchi" required>
+          </div>
+          <div>
+            <label for="fDateStart">Start date</label>
+            <input type="date" id="fDateStart" required>
+          </div>
+          <div>
+            <label for="fDateEnd">End date</label>
+            <input type="date" id="fDateEnd" required>
+          </div>
+          <div>
+            <label for="fLoc">Location</label>
+            <input type="text" id="fLoc" placeholder="e.g. Bangsar, Kuala Lumpur" required>
+          </div>
+          <div>
+            <label for="fVolunteers">Number of volunteers</label>
+            <input type="number" id="fVolunteers" min="0" placeholder="e.g. 8" required>
+          </div>
+          <div>
+            <label for="fParticipants">Number of participants</label>
+            <input type="number" id="fParticipants" min="1" placeholder="e.g. 25" required>
+          </div>
+          <div>
+            <label for="fReach">Estimated reach (family &amp; community members)</label>
+            <input type="number" id="fReach" min="0" placeholder="e.g. 60" required>
+          </div>
+          <div class="full">
+            <label>Modules carried out (tick all that apply)</label>
+            <div class="modules-box" id="moduleBox">
+              <label class="chk"><input type="checkbox" value="English Reading Module"> English Reading Module</label>
+              <label class="chk"><input type="checkbox" value="Basic Maths Module"> Basic Maths Module</label>
+              <label class="chk"><input type="checkbox" value="Health &amp; Hygiene Awareness"> Health &amp; Hygiene Awareness</label>
+              <label class="chk"><input type="checkbox" value="Food Aid Distribution"> Food Aid Distribution</label>
+              <label class="chk"><input type="checkbox" value="Community Clean-Up"> Community Clean-Up</label>
+              <label class="chk"><input type="checkbox" value="Digital Skills for Youth"> Digital Skills for Youth</label>
+              <label class="chk"><input type="checkbox" id="fOtherChk" value="__other__"> Others (type your own)</label>
+              <input type="text" id="fOtherModule" placeholder="e.g. Solar Lamp Workshop" style="display:none;margin-top:6px">
+            </div>
+          </div>
+          <div class="full">
+            <label for="fNotes">Notes</label>
+            <textarea id="fNotes" placeholder="What happened today? Any highlights or challenges?"></textarea>
+          </div>
+          <div class="full">
+            <label>Pictures</label>
+            <div class="attach-row">
+              <label class="file-btn">Attach pictures
+                <input type="file" id="fPics" accept="image/*" multiple>
+              </label>
+              <span class="attach-note" id="picCount">No pictures selected yet</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn" id="cancelEditBtn" hidden style="background:var(--line);color:var(--ink)">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="submitBtn">Add Activity Update</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="entryList"></div>
+  </section>
+
+  <!-- ============ 2. IMPACT SUMMARY ============ -->
+  <section id="impact-section">
+    <div class="section-head"><div class="section-num">2</div><h2>Impact Summary</h2></div>
+    <p class="section-sub">A simple look at what happened and what changed, based on the entries above.</p>
+    <div class="card">
+      <div class="stats" id="stats"></div>
+      <div class="bar-block">
+        <div class="bar-title"><span>Participants reached (per entry)</span></div>
+        <div id="bars"></div>
+      </div>
+      <h4 style="color:var(--teal);margin-top:16px">Short insights</h4>
+      <ul class="insights" id="insights"></ul>
+    </div>
+  </section>
+
+  <!-- ============ 3. FINAL REPORT ============ -->
+  <section id="report-section">
+    <div class="section-head"><div class="section-num">3</div><h2>Final Report</h2></div>
+    <p class="section-sub">Generate a clean, ready-to-read summary you can keep on screen for later use.</p>
+    <div class="card">
+      <div style="text-align:center;margin-bottom:14px">
+        <button class="btn btn-teal" id="genBtn">Generate Final Report</button>
+        <button class="btn btn-primary" id="printBtn" hidden>Print / Save as PDF</button>
+      </div>
+      <div id="reportArea">
+        <p id="reportPlaceholder">Your report will appear here once you click “Generate Final Report”.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Data is stored only in this browser (localStorage) — nothing is sent anywhere.
+  <button type="button" class="mini-btn danger" id="resetBtn" style="margin-left:8px">Reset all data</button>
+</footer>
+
+<script>
+const STORAGE_KEY = "ngo-impact-entries";
+let entries = []; // {name,date,loc,participants,reach,modules,notes,pics:[dataURL]}
+
+/* ---------- storage ---------- */
+function saveEntries(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
+  catch(err){ alert("Could not save entries (storage may be full — try fewer or smaller pictures)."); }
+}
+function loadEntries(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const list = JSON.parse(raw);
+      // migrate entries saved before volunteers / end-date existed
+      list.forEach(e=>{
+        if(e.volunteers === undefined) e.volunteers = 0;
+        if(e.dateEnd === undefined) e.dateEnd = e.date;
+      });
+      return list;
+    }
+  }catch(err){ /* corrupted or unavailable — fall back to sample */ }
+  return null;
+}
+
+/* ---------- sample data (Malaysia-specific, made up; used only on first visit) ---------- */
+const today = new Date();
+function d(daysAgo){
+  const t = new Date(today); t.setDate(t.getDate()-daysAgo);
+  return t.toISOString().slice(0,10);
+}
+// Sample SVG data-URL "pictures" (colored placeholders with captions)
+function phPic(color,label){
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='300' height='220'><rect width='300' height='220' fill='${color}'/><text x='150' y='115' font-family='Segoe UI' font-size='16' fill='white' text-anchor='middle'>${label}</text></svg>`;
+  return "data:image/svg+xml," + encodeURIComponent(svg);
+}
+const SAMPLE_ENTRIES = [
+  {
+    name:"Weekend Tuition Class at PPR Kerinchi", date:d(21), dateEnd:d(20), loc:"PPR Kerinchi, Kuala Lumpur",
+    volunteers:8, participants:24, reach:55,
+    modules:["English Reading Module","Basic Maths Module"],
+    notes:"Twenty-four children from Block C joined the weekend class. Volunteers paired older students with younger ones for reading practice. Parents stayed for the last half hour and were happy with the progress shown.",
+    pics:[phPic("#2f2f2f","Sample photo: reading circle"),phPic("#6b6b6b","Sample photo: maths games")]
+  },
+  {
+    name:"Food Aid Distribution — Ramadhan Pack", date:d(12), dateEnd:d(12), loc:"Flat Sri Penara, Cheras",
+    volunteers:12, participants:40, reach:120,
+    modules:["Food Aid Distribution"],
+    notes:"Forty families from the flat community received food packs with rice, cooking oil, flour and dates. Volunteers from the local surau helped with packing and delivery to elderly residents on the upper floors.",
+    pics:[phPic("#4a4a4a","Sample photo: food packs ready"),phPic("#8f8f8d","Sample photo: distribution day")]
+  },
+  {
+    name:"Community Clean-Up & Hygiene Talk", date:d(3), dateEnd:d(1), loc:"Taman Muhibbah, Petaling Jaya",
+    volunteers:9, participants:30, reach:70,
+    modules:["Community Clean-Up","Health & Hygiene Awareness","Tree Planting Along Riverbank"],
+    notes:"Thirty residents, together with nine student volunteers, cleaned the playground area and back lanes across three days. A short hygiene talk followed at the community hall, with hand-washing demonstrations for the children, and the programme ended with tree planting along the riverbank.",
+    pics:[phPic("#5c5c5a","Sample photo: clean-up team"),phPic("#a8a8a6","Sample photo: hygiene talk")]
+  }
+];
+entries = loadEntries() ?? SAMPLE_ENTRIES;
+
+/* ---------- duration & "Others" module ---------- */
+function daysBetween(start,end){
+  const a = new Date(start+"T00:00:00"), b = new Date(end+"T00:00:00");
+  return Math.round((b-a)/86400000);
+}
+function fmtDuration(e){
+  if(e.dateEnd && e.dateEnd !== e.date) return `${fmtDate(e.date)} – ${fmtDate(e.dateEnd)} (${daysBetween(e.date,e.dateEnd)+1} days)`;
+  return fmtDate(e.date);
+}
+const otherChk = document.getElementById("fOtherChk");
+const otherInput = document.getElementById("fOtherModule");
+otherChk.addEventListener("change",()=>{
+  otherInput.style.display = otherChk.checked ? "block" : "none";
+  if(otherChk.checked) otherInput.focus();
+});
+
+/* ---------- activity log rendering ---------- */
+function fmtDate(s){
+  const dt = new Date(s+"T00:00:00");
+  return dt.toLocaleDateString("en-MY",{day:"numeric",month:"long",year:"numeric"});
+}
+function renderEntries(){
+  const list = document.getElementById("entryList");
+  if(!entries.length){
+    list.innerHTML = '<p class="empty-msg">No activity entries yet — add your first update above.</p>';
+    return;
+  }
+  list.innerHTML = entries.map((e,i)=>`
+    <div class="entry">
+      <span class="entry-tag">UPDATE ${entries.length-i}</span>
+      <h3>${esc(e.name)}</h3>
+      <div class="meta">
+        <span class="chip">${fmtDuration(e)}</span>
+        <span class="chip">${esc(e.loc)}</span>
+        <span class="chip warm">${e.volunteers} volunteer${e.volunteers===1?"":"s"}</span>
+        <span class="chip warm">${e.participants} participant${e.participants===1?"":"s"}</span>
+        <span class="chip warm">Reach: ${e.reach} community members</span>
+      </div>
+      ${e.modules.length?`<div class="module-list"><strong>Modules carried out:</strong> ${e.modules.map(esc).join(" • ")}</div>`:""}
+      ${e.notes?`<p class="notes">${esc(e.notes)}</p>`:""}
+      ${e.pics.length?`<div class="pics">${e.pics.map(p=>`<img src="${p}" alt="Activity picture">`).join("")}</div>`:""}
+      <div class="entry-actions">
+        <button type="button" class="mini-btn" data-edit="${i}">Edit</button>
+        <button type="button" class="mini-btn danger" data-del="${i}">Delete</button>
+      </div>
+    </div>`).join("");
+
+  list.querySelectorAll("[data-del]").forEach(b=>b.addEventListener("click",()=>{
+    const i = +b.dataset.del;
+    if(confirm(`Delete “${entries[i].name}”? This cannot be undone.`)){
+      entries.splice(i,1);
+      saveEntries(); renderEntries(); renderImpact();
+    }
+  }));
+  list.querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>startEdit(+b.dataset.edit)));
+}
+function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+
+/* ---------- form ---------- */
+const picInput = document.getElementById("fPics");
+let pendingPics = [];
+let editingIndex = -1; // -1 = adding a new entry
+
+// shrink pictures to max 900px on the long edge before storing as data-URL
+function shrinkImage(dataURL, maxSide = 900){
+  return new Promise(resolve=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const scale = Math.min(1, maxSide/Math.max(img.width, img.height));
+      if(scale === 1 && dataURL.startsWith("data:image/svg")) return resolve(dataURL);
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width*scale);
+      c.height = Math.round(img.height*scale);
+      c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      resolve(c.toDataURL("image/jpeg",0.82));
+    };
+    img.onerror = ()=>resolve(dataURL); // if it can't be read, keep the original
+    img.src = dataURL;
+  });
+}
+picInput.addEventListener("change",async()=>{
+  pendingPics = [];
+  const files = [...picInput.files];
+  const counter = document.getElementById("picCount");
+  if(!files.length){counter.textContent="No pictures selected yet";renderPendingPreview();return;}
+  counter.textContent = "Processing pictures…";
+  for(const f of files){
+    const raw = await new Promise(res=>{
+      const r = new FileReader();
+      r.onload = ev=>res(ev.target.result);
+      r.readAsDataURL(f);
+    });
+    pendingPics.push(await shrinkImage(raw));
+  }
+  counter.textContent = `${pendingPics.length} picture${pendingPics.length>1?"s":""} ready to attach`;
+  renderPendingPreview();
+});
+function renderPendingPreview(){
+  const list = document.getElementById("entryList");
+  const prev = document.getElementById("pendingPrev");
+  if(prev) prev.remove();
+  if(!pendingPics.length) return;
+  const div = document.createElement("div");
+  div.id="pendingPrev";
+  div.innerHTML = `<p style="font-size:.85rem;color:var(--muted);margin-bottom:8px">Attached pictures (will appear with your new entry):</p>
+    <div class="pics">${pendingPics.map(p=>`<img src="${p}" alt="Attached picture">`).join("")}</div>`;
+  list.prepend(div);
+}
+
+function formToEntry(){
+  const modules = [...document.querySelectorAll("#moduleBox input:checked")]
+    .filter(c=>c.value!=="__other__").map(c=>c.value);
+  const otherTxt = otherInput.value.trim();
+  if(otherChk.checked && otherTxt) modules.push(otherTxt);
+  return {
+    name:document.getElementById("fName").value.trim(),
+    date:document.getElementById("fDateStart").value,
+    dateEnd:document.getElementById("fDateEnd").value,
+    loc:document.getElementById("fLoc").value.trim(),
+    volunteers:parseInt(document.getElementById("fVolunteers").value)||0,
+    participants:parseInt(document.getElementById("fParticipants").value)||0,
+    reach:parseInt(document.getElementById("fReach").value)||0,
+    modules:modules,
+    notes:document.getElementById("fNotes").value.trim(),
+    pics:pendingPics.slice()
+  };
+}
+function clearForm(){
+  document.getElementById("activityForm").reset();
+  pendingPics=[];
+  picInput.value="";
+  document.getElementById("picCount").textContent="No pictures selected yet";
+  editingIndex=-1;
+  document.getElementById("submitBtn").textContent="Add Activity Update";
+  document.getElementById("cancelEditBtn").hidden = true;
+  renderPendingPreview();
+}
+function startEdit(i){
+  editingIndex = i;
+  const e = entries[i];
+  document.getElementById("fName").value = e.name;
+  document.getElementById("fDateStart").value = e.date;
+  document.getElementById("fDateEnd").value = e.dateEnd || e.date;
+  document.getElementById("fLoc").value = e.loc;
+  document.getElementById("fVolunteers").value = e.volunteers;
+  document.getElementById("fParticipants").value = e.participants;
+  document.getElementById("fReach").value = e.reach;
+  const known = [...document.querySelectorAll("#moduleBox input[value]:not([value='__other__'])")].map(c=>c.value);
+  const customs = e.modules.filter(m=>!known.includes(m));
+  document.querySelectorAll("#moduleBox input").forEach(c=>c.checked = false);
+  e.modules.filter(m=>known.includes(m)).forEach(m=>{
+    document.querySelector(`#moduleBox input[value="${CSS.escape(m)}"]`).checked = true;
+  });
+  if(customs.length){
+    otherChk.checked = true;
+    otherInput.style.display = "block";
+    otherInput.value = customs.join(", ");
+  }
+  document.getElementById("fNotes").value = e.notes;
+  pendingPics = e.pics.slice();
+  document.getElementById("picCount").textContent = `${pendingPics.length} picture${pendingPics.length>1?"s":""} already attached (select new files to replace)`;
+  document.getElementById("submitBtn").textContent="Save Changes";
+  document.getElementById("cancelEditBtn").hidden = false;
+  renderPendingPreview();
+  document.getElementById("log-section").scrollIntoView({behavior:"smooth",block:"start"});
+}
+document.getElementById("cancelEditBtn").addEventListener("click",clearForm);
+
+document.getElementById("activityForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const start = document.getElementById("fDateStart").value;
+  const end = document.getElementById("fDateEnd").value;
+  if(start && end && end < start){
+    alert("End date cannot be earlier than the start date.");
+    document.getElementById("fDateEnd").focus();
+    return;
+  }
+  if(otherChk.checked && !otherInput.value.trim()){
+    alert("Please type the name of your custom module, or untick “Others”.");
+    otherInput.focus();
+    return;
+  }
+  const entry = formToEntry();
+  if(editingIndex === -1){
+    entries.unshift(entry);
+  }else{
+    entries[editingIndex] = entry;
+  }
+  clearForm();
+  saveEntries(); renderEntries(); renderImpact();
+  document.getElementById("entryList").scrollIntoView({behavior:"smooth",block:"start"});
+});
+
+// default dates = today
+document.getElementById("fDateStart").value = today.toISOString().slice(0,10);
+document.getElementById("fDateEnd").value = today.toISOString().slice(0,10);
+
+/* ---------- impact summary ---------- */
+function renderImpact(){
+  const totalV = entries.reduce((a,e)=>a+(e.volunteers||0),0);
+  const totalP = entries.reduce((a,e)=>a+e.participants,0);
+  const totalR = entries.reduce((a,e)=>a+e.reach,0);
+  const modCount = {};
+  entries.forEach(e=>e.modules.forEach(m=>modCount[m]=(modCount[m]||0)+1));
+  const uniqueMods = Object.keys(modCount).length;
+
+  document.getElementById("stats").innerHTML = `
+    <div class="stat"><div class="num">${entries.length}</div><div class="lbl">Activity updates</div></div>
+    <div class="stat"><div class="num">${totalV}</div><div class="lbl">Total volunteers</div></div>
+    <div class="stat"><div class="num">${totalP}</div><div class="lbl">Total participants</div></div>
+    <div class="stat"><div class="num">${totalR}</div><div class="lbl">Estimated community reach</div></div>
+    <div class="stat"><div class="num">${uniqueMods}</div><div class="lbl">Different modules used</div></div>`;
+
+  const maxP = Math.max(...entries.map(e=>e.participants),1);
+  document.getElementById("bars").innerHTML = entries.map((e,i)=>`
+    <div style="margin-bottom:8px">
+      <div class="bar-title"><span>${esc(e.name)}</span><span>${e.participants}</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(e.participants/maxP*100)}%"></div></div>
+    </div>`).join("");
+
+  const topMod = Object.entries(modCount).sort((a,b)=>b[1]-a[1])[0];
+  const avg = entries.length?Math.round(totalP/entries.length):0;
+  const insights = [];
+  if(entries.length) insights.push(`Across ${entries.length} activity update${entries.length>1?"s":""}, a total of ${totalP} participants joined, supported by ${totalV} volunteer${totalV===1?"":"s"}, with an average of ${avg} participants per activity.`);
+  if(totalR) insights.push(`The activities are estimated to have reached about ${totalR} community members, including family members of participants.`);
+  if(topMod) insights.push(`The most frequently carried-out module is “${topMod[0]}”, run in ${topMod[1]} of the updates.`);
+  if(entries.length>1){
+    const latest = entries[0];
+    insights.push(`The most recent activity, “${latest.name}”, had ${latest.participants} participants at ${latest.loc}.`);
+  }
+  insights.push("Note: all figures above come only from the entries recorded on this page.");
+  document.getElementById("insights").innerHTML = insights.map(t=>`<li>${esc(t)}</li>`).join("");
+}
+
+/* ---------- final report ---------- */
+document.getElementById("genBtn").addEventListener("click",()=>{
+  const totalV = entries.reduce((a,e)=>a+(e.volunteers||0),0);
+  const totalP = entries.reduce((a,e)=>a+e.participants,0);
+  const totalR = entries.reduce((a,e)=>a+e.reach,0);
+  const modCount = {};
+  entries.forEach(e=>e.modules.forEach(m=>modCount[m]=(modCount[m]||0)+1));
+  const allMods = Object.keys(modCount);
+  const dates = [...entries.map(e=>e.date),...entries.map(e=>e.dateEnd||e.date)].sort();
+  const areas = [...new Set(entries.map(e=>e.loc))];
+
+  const html = `
+  <div class="report">
+    <div class="r-head">
+      <h3>Activity Impact Report</h3>
+      <div class="r-sub">Prepared on ${fmtDate(today.toISOString().slice(0,10))} · Community Programme Summary</div>
+    </div>
+
+    <h4>1. Overview</h4>
+    <table>
+      <tr><td>Number of activity updates</td><td>${entries.length}</td></tr>
+      <tr><td>Period covered</td><td>${fmtDate(dates[0])} – ${fmtDate(dates[dates.length-1])}</td></tr>
+      <tr><td>Locations involved</td><td>${areas.map(esc).join(", ")}</td></tr>
+      <tr><td>Total volunteers</td><td>${totalV}</td></tr>
+      <tr><td>Total participants</td><td>${totalP}</td></tr>
+      <tr><td>Estimated community reach</td><td>${totalR} people</td></tr>
+      <tr><td>Modules carried out</td><td>${allMods.length?allMods.map(esc).join(", "):"—"}</td></tr>
+    </table>
+
+    <h4>2. Activity Details</h4>
+    ${entries.map((e,i)=>`
+      <table style="margin-bottom:6px">
+        <tr><td>Activity ${entries.length-i}</td><td><strong>${esc(e.name)}</strong></td></tr>
+        <tr><td>Date &amp; location</td><td>${fmtDuration(e)} — ${esc(e.loc)}</td></tr>
+        <tr><td>Volunteers / participants</td><td>${e.volunteers||0} volunteer${(e.volunteers||0)===1?"":"s"} · ${e.participants} participant${e.participants===1?"":"s"}</td></tr>
+        <tr><td>Estimated reach</td><td>${e.reach} community members</td></tr>
+        ${e.modules.length?`<tr><td>Modules</td><td>${e.modules.map(esc).join(", ")}</td></tr>`:""}
+        ${e.notes?`<tr><td>Notes</td><td>${esc(e.notes)}</td></tr>`:""}
+      </table>
+      ${e.pics.length?`<div class="r-pics">${e.pics.map(p=>`<img src="${p}" alt="Activity picture">`).join("")}</div>`:""}
+      ${i<entries.length-1?'<hr style="border:none;border-top:1px dashed var(--line);margin:14px 0">':""}
+    `).join("")}
+
+    <h4>3. Impact at a Glance</h4>
+    <ul>
+      <li>${totalV} volunteer${totalV===1?"":"s"} helped run the activities, with ${totalP} participants taking part across all recorded activities.</li>
+      <li>Estimated reach of approximately ${totalR} community members, including participants' families.</li>
+      <li>${allMods.length} different module${allMods.length!==1?"s":""} delivered: ${allMods.map(esc).join(", ")}.</li>
+    </ul>
+
+    <div class="r-note">This report is generated in the browser from the entries recorded above and is saved only on this device.</div>
+    <div class="r-foot">NGO Activity Impact Report · Generated in-browser · Keep this page for your records</div>
+  </div>`;
+  document.getElementById("reportArea").innerHTML = html;
+  document.getElementById("printBtn").hidden = false;
+  document.getElementById("reportArea").scrollIntoView({behavior:"smooth",block:"start"});
+});
+document.getElementById("printBtn").addEventListener("click",()=>window.print());
+
+/* ---------- reset all data ---------- */
+document.getElementById("resetBtn").addEventListener("click",()=>{
+  if(!confirm("Delete ALL saved activity entries and restore the sample data?")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  entries = SAMPLE_ENTRIES.slice();
+  clearForm(); saveEntries(); renderEntries(); renderImpact();
+  document.getElementById("reportArea").innerHTML = '<p id="reportPlaceholder">Your report will appear here once you click “Generate Final Report”.</p>';
+  document.getElementById("printBtn").hidden = true;
+});
+
+/* ---------- init ---------- */
+renderEntries();
+renderImpact();
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NGO Activity Impact Report</title>
+<meta property="og:title" content="NGO Activity Impact Report">
+<meta property="og:description" content="Record community activities, track volunteers and impact, and generate a shareable report — all in one simple page.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://alyssamarie1707.github.io/ngo-activity-impact-report/">
+<meta property="og:image" content="https://alyssamarie1707.github.io/ngo-activity-impact-report/og-image.png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="NGO Activity Impact Report — activity log, entries, impact summary and final report">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="image_src" href="https://alyssamarie1707.github.io/ngo-activity-impact-report/og-image.png">
+<style>
+  :root{
     --bg:#f4f9f1;
     --card:#ffffff;
     --leaf:#dcedc8;
